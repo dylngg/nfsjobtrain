@@ -1,6 +1,6 @@
 # nfsjobtrain
 
-`jobtrain` is a script meant to be run continuously in a cronjob on remote systems connected by a NFS (Network File System) that sequentially executes jobs assigned to it's host. It is meant to be used in scenarios where your only way to communicate with another node is through a NFS. Fundamentally, the script works by executing and **removing** jobs in `jobs/all` and `` jobs/`hostname` `` if a job isn't already running and outputting it to either `out/all` or `` out/`hostname` ``.
+`jobtrain.sh` is a script meant to be run continuously in a cronjob on remote systems connected by a NFS (Network File System) that sequentially executes jobs assigned to it's host. It is meant to be used in scenarios where your only way to communicate with another node is through a NFS. Fundamentally, the script works by executing and **removing** jobs in `jobs/all` and `` jobs/`hostname` `` if a job isn't already running and outputting it to either `out/all` or `` out/`hostname` ``.
 
 ## Installation
 
