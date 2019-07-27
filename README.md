@@ -29,3 +29,21 @@ created.
 
   -h --help		Show this help.
 ```
+
+## Cleaning up a job
+
+After a job has ran, your job is left in `jobs/*` and the output is in `out/*`. You can safely remove these files.
+
+A script called `jobremove.sh` can help facilitate this:
+
+```bash
+jobremove.sh {JOB} [ARGS] [HOSTS...]
+
+Removes a job and it's corresponding outfile in the specified hosts.
+
+  -h --help		Show this help.
+
+ARGS:
+  -o --out		Remove only the outfile, not the job.
+  -j --job		Remove only the job, not the outfile.
+```
