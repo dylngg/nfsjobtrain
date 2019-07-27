@@ -13,7 +13,7 @@ if [ "$JOB_ALL_DIR" == "" ]; then JOB_ALL_DIR="$default_job_all_dir"; fi
 default_job_out_dir="out"
 if [ "$JOB_OUT_DIR" == "" ]; then JOB_OUT_DIR="$default_job_out_dir"; fi
 
-found_jobs=`find "$JOB_DIR/\`hostname\`" "$JOB_ALL_DIR" -type f`
+found_jobs=`find "$JOB_DIR/\`hostname\`" "$JOB_ALL_DIR" -type f 2>/dev/null`
 if [ "$?" -ne 0 ]; then
     exit 1
 fi

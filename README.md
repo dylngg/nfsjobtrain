@@ -21,7 +21,6 @@ Copy/move the executable to the `jobs/host` you want to run on, or `jobs/all`. Y
 A script called `jobsubmit.sh` can help facilitate this:
 
 ```bash
-$ jobsubmit.sh --help
 jobsubmit.sh {JOB} [HOSTS...]
 
 Submits jobs to the jobtrain. If the job host directory doesn't exist, it is
