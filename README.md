@@ -7,8 +7,8 @@
 ```bash
 $ git clone https://github.com/dylngg/nfsjobtrain.git
 $ cd nfsjobtrain
-$ # Do the following on all the nodes you want to run on
-$ (crontab -l 2>/dev/null; echo "1 * * * * cd `pwd` && /bin/sh jobtrain.sh") | crontab -
+$ # Do the following on all the nodes you want to run on (may have to modify "`pwd`")
+$ (crontab -l 2>/dev/null; echo "* * * * * cd `pwd`; /bin/sh jobtrain.sh") | crontab -
 $ mkdir -p jobs/`hostame` jobs/all
 ```
 
