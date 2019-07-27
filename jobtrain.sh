@@ -43,5 +43,5 @@ self=`id -u`
 is_job_running=`ps -u "$self" -o comm | grep -v "| grep" | grep "$jobname"`
 # Must be a valid job and cannot be running
 if [ "$is_job_running" == "" ]; then
-  ./"$chosen_job" > "$outpath" &
+  ./"$chosen_job" > "$outpath" 2>&1 &
 fi
