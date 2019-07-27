@@ -21,14 +21,7 @@ fi
 # Want a job that doesn't have a out file
 for job in $found_jobs; do
   jobname=`basename "$job"`
-  case $job in
-    $JOB_ALL_DIR*)
-      outpath="$JOB_OUT_DIR/all/$jobname.out"
-      ;;
-    *)
-      outpath="$JOB_OUT_DIR/`hostname`/$jobname.out"
-      ;;
-  esac
+  outpath="$JOB_OUT_DIR/`hostname`/$jobname.out"
   if [ ! -f "$outpath" ]; then
     chosen_job="$job"
     break
