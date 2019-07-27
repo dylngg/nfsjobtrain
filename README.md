@@ -16,4 +16,16 @@ Easy as that.
 
 ## Running a job
 
-Copy/move the executable to the `jobs/host` you want to run on, or `jobs/all`. Your cronjob should execute that program.
+Copy/move the executable to the `jobs/host` you want to run on, or `jobs/all`. Your cronjob on each host should execute that program.
+
+A script called `jobsubmit.sh` can help facilitate this:
+
+```bash
+$ jobsubmit.sh --help
+jobsubmit.sh {JOB} [HOSTS...]
+
+Submits jobs to the jobtrain. If the job host directory doesn't exist, it is
+created.
+
+  -h --help		Show this help.
+```
