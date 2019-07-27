@@ -48,7 +48,7 @@ for host in "$@"; do
   elif [ ! -d "$host_job_dir" ]; then
     mkdir -p "$host_job_dir"
   fi
-  cp "$job" "$host_job_dir"
+  cp -v "$job" "$host_job_dir"
 done
 
 if [ "$host_job_dir" == "" ]; then
