@@ -46,3 +46,21 @@ ARGS:
   -o --out		Remove only the outfile, not the job.
   -j --job		Remove only the job, not the outfile.
 ```
+
+## Viewing a jobs output
+
+After a job has ran, the output is in `out/*`. If you submitted to multiple hosts, it may be useful to combine the output of the hosts into a single file.
+
+A script called `jobcombine.sh` can help facilitate this:
+
+```bash
+jobcombine.sh {JOB} [ARGS] [HOSTS...]
+
+Combines a job's corresponding outfiles into a single file.
+
+  -h --help             Show this help.
+
+ARGS:
+  -d --delim            What to delimit the files by (defaults to \n).
+  -o --out              Where to send the output to (defaults to jobname.out).
+```
