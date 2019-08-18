@@ -54,5 +54,3 @@ done
 if [ "$host_job_dir" == "" ]; then
   die "No host specified"
 fi
-
-echo "Done."
