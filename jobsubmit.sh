@@ -41,7 +41,12 @@ fi
 default_job_dir="jobs"
 if [ "$JOB_DIR" == "" ]; then JOB_DIR="$default_job_dir"; fi
 
-for host in "$@"; do
+hosts="$@"
+if [ "$hosts" == "" ]; then
+  hosts="all"
+fi
+
+for host in "$hosts"; do
   host_job_dir="$JOB_DIR/$host"
   if [ -f "$host_job_dir" ]; then
     die "Job host directory: $host_job_dir is a file, not a directory"
@@ -50,7 +55,3 @@ for host in "$@"; do
   fi
   cp -v "$job" "$host_job_dir"
 done
-
-if [ "$host_job_dir" == "" ]; then
-  die "No host specified"
-fi

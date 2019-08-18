@@ -62,7 +62,8 @@ while test $# -gt 0; do
 done
 
 if [ "$hosts" == "" ]; then
-  die "No host specified"
+  hosts="all"
+  hasall=true
 fi
 
 if $removeout && $hasall; then
