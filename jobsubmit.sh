@@ -46,7 +46,7 @@ if [ "$hosts" == "" ]; then
   hosts="all"
 fi
 
-for host in "$hosts"; do
+for host in $hosts; do
   host_job_dir="$JOB_DIR/$host"
   if [ -f "$host_job_dir" ]; then
     die "Job host directory: $host_job_dir is a file, not a directory"
