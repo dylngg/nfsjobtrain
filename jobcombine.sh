@@ -5,13 +5,13 @@ if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
   cat <<EOF
 jobcombine.sh {JOB} [ARGS] [HOSTS...]
 
-Combines a job's corresponding outfiles into a single file.
+Combines a job's corresponding outfiles into stdout or a single file.
 
   -h --help		Show this help.
 
 ARGS:
   -d --delim		What to delimit the files by (defaults to \\n).
-  -o --out		Where to send the output to (defaults to jobname.out).
+  -o --out		What file to send the output to (jobname.out if arg not given).
 EOF
   exit 0
 fi
@@ -33,26 +33,22 @@ if [ "$JOB_DIR" == "" ]; then JOB_DIR="$default_job_dir"; fi
 default_job_out_dir="out"
 if [ "$JOB_OUT_DIR" == "" ]; then JOB_OUT_DIR="$default_job_out_dir"; fi
 
-out="$jobname.out"
+out="/dev/stdout"
 delim='\n'
 hasall=false
 hosts=""
 while test $# -gt 0; do
   case "$1" in
-    -d)
+    -d | --delim)
       delim="$2"
       shift
       ;;
-    --delim)
-      delim="$2"
-      shift
-      ;;
-    -o)
-      out="$2"
-      shift
-      ;;
-    --out)
-      out="$2"
+    -o | --out)
+      if [ "$2" != "" ]; then
+        out="$2"
+      else
+        out="$jobname.out"
+      fi
       shift
       ;;
     --*) echo "bad option $1"
@@ -73,7 +69,7 @@ if [ "$hosts" == "" ]; then
 fi
 
 if $hasall; then
-  for f in "$JOB_OUT_DIR/**/$jobname.out"; do
+  for f in $JOB_OUT_DIR/**/$jobname.out; do
     cat $f >> "$out"
     printf "$delim" >> "$out"
   done
