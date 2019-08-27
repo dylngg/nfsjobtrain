@@ -70,12 +70,14 @@ fi
 
 if $hasall; then
   for f in $JOB_OUT_DIR/**/$jobname.out; do
+    echo `basename "\`dirname $f\`"` >> "$out"
     cat $f >> "$out"
     printf "$delim" >> "$out"
   done
 
 else
   for host in $hosts; do
+    echo $host >> "$out"
     cat "$JOB_OUT_DIR/$host/$jobname.out" >> "$out"
     printf "$delim" >> "$out"
   done
