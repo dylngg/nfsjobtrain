@@ -12,6 +12,7 @@ Removes a job and it's corresponding outfile in the specified hosts.
 ARGS:
   -o --out		Remove only the outfile, not the job.
   -j --job		Remove only the job, not the outfile.
+  -q --quiet		Don't print anything.
 EOF
   exit 0
 fi
@@ -35,6 +36,7 @@ if [ "$JOB_OUT_DIR" == "" ]; then JOB_OUT_DIR="$default_job_out_dir"; fi
 
 removeout=true
 removejob=true
+remove="rm -v"
 hasall=false
 hosts=""
 while test $# -gt 0; do
@@ -50,6 +52,12 @@ while test $# -gt 0; do
       ;;
     --job)
       removeout=false
+      ;;
+    -q)
+      remove="rm"
+      ;;
+    --quiet)
+      remove="rm"
       ;;
     --*) echo "bad option $1"
       ;;
@@ -68,15 +76,15 @@ fi
 
 if $removeout && $hasall; then
   # Remove all the out files at once
-  rm -v $JOB_OUT_DIR/*/$jobname.out 2>/dev/null
+  $remove $JOB_OUT_DIR/*/$jobname.out 2>/dev/null
   removeout=false  # Prevent removal again
 fi
 
 for host in $hosts; do
   if $removeout; then
-    rm -v "$JOB_OUT_DIR/$host/$jobname.out" 2>/dev/null
+    $remove "$JOB_OUT_DIR/$host/$jobname.out" 2>/dev/null
   fi
   if $removejob; then
-    rm -v "$JOB_DIR/$host/$jobname" 2>/dev/null
+    $remove "$JOB_DIR/$host/$jobname" 2>/dev/null
   fi
 done
