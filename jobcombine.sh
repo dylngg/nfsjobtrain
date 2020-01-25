@@ -13,6 +13,7 @@ ARGS:
   -d CHAR, --delim      CHAR What to delimit the files by (defaults to \\n).
   -o FILE, --out FILE   What file to send the output to (jobname.out if FILE
                         not given, otherwise stdout)
+  -v, --verbose         Prints out the hosts that didn't have a outfile.
   -w TIME, --wait TIME  Waits the given time, or until all the outfiles appear
                         before combining the outfiles into a single file.
 EOF
@@ -36,6 +37,7 @@ if [ "$JOB_DIR" == "" ]; then JOB_DIR="$default_job_dir"; fi
 default_job_out_dir="out"
 if [ "$JOB_OUT_DIR" == "" ]; then JOB_OUT_DIR="$default_job_out_dir"; fi
 
+verbose=false
 timeout=0
 out="/dev/stdout"
 delim='\n'
@@ -54,6 +56,9 @@ while test $# -gt 0; do
         out="$jobname.out"
       fi
       shift
+      ;;
+    -v | --verbose)
+      verbose=true
       ;;
     -w | --wait)
       timeout="$2"
@@ -103,3 +108,11 @@ for host in ${uphosts[@]}; do
   cat "$JOB_OUT_DIR/$host/$jobname.out" >> "$out"
   printf "$delim" >> "$out"
 done
+
+if $verbose; then
+  printf "No outfiles found for: "
+  for host in ${downhosts[@]}; do
+    printf "$host "
+  done
+  echo ""
+fi
