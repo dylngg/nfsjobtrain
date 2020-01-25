@@ -37,6 +37,9 @@ if IFS= read -r line < "$job"; then
       ;;
   esac
 fi
+if ! test -x "$job"; then
+  die "Not executable"
+fi
 
 default_job_dir="jobs"
 if [ "$JOB_DIR" == "" ]; then JOB_DIR="$default_job_dir"; fi
