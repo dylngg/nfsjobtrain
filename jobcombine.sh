@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Combines a job's corresponding outfiles into a single file.
 # Usage: ./jobcombine.sh job host1 host2 ...
 if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
@@ -7,11 +7,14 @@ jobcombine.sh {JOB} [ARGS] [HOSTS...]
 
 Combines a job's corresponding outfiles into stdout or a single file.
 
-  -h --help		Show this help.
+  -h --help             Show this help.
 
 ARGS:
-  -d --delim		What to delimit the files by (defaults to \\n).
-  -o --out		What file to send the output to (jobname.out if arg not given).
+  -d CHAR, --delim      CHAR What to delimit the files by (defaults to \\n).
+  -o FILE, --out FILE   What file to send the output to (jobname.out if FILE
+                        not given, otherwise stdout)
+  -w TIME, --wait TIME  Waits the given time, or until all the outfiles appear
+                        before combining the outfiles into a single file.
 EOF
   exit 0
 fi
@@ -33,6 +36,7 @@ if [ "$JOB_DIR" == "" ]; then JOB_DIR="$default_job_dir"; fi
 default_job_out_dir="out"
 if [ "$JOB_OUT_DIR" == "" ]; then JOB_OUT_DIR="$default_job_out_dir"; fi
 
+timeout=0
 out="/dev/stdout"
 delim='\n'
 hasall=false
@@ -49,6 +53,10 @@ while test $# -gt 0; do
       else
         out="$jobname.out"
       fi
+      shift
+      ;;
+    -w | --wait)
+      timeout="$2"
       shift
       ;;
     --*) echo "bad option $1"
@@ -69,16 +77,29 @@ if [ "$hosts" == "" ]; then
 fi
 
 if $hasall; then
-  for f in $JOB_OUT_DIR/**/$jobname.out; do
-    echo `basename "\`dirname $f\`"` >> "$out"
-    cat $f >> "$out"
-    printf "$delim" >> "$out"
+  hosts=`find $JOB_OUT_DIR/ -maxdepth 1 -mindepth 1 -type d -exec basename '{}' \; | tr '\n' ' '`
+fi
+
+downhosts=($hosts)
+uphosts=()
+starttime=`date +%s`
+endtime=`expr $starttime + $timeout`
+while [ "`date +%s`" -lt "$endtime" ]; do
+  for host in ${downhosts[@]}; do
+    if [ -f "$JOB_OUT_DIR/$host/$jobname.out" ]; then
+      downhosts=("${downhosts[@]:1}")
+      uphosts+=("$host")
+    fi
   done
 
-else
-  for host in $hosts; do
-    echo $host >> "$out"
-    cat "$JOB_OUT_DIR/$host/$jobname.out" >> "$out"
-    printf "$delim" >> "$out"
-  done
-fi
+  if [ ${#downhosts[@]} -eq 0 ]; then
+    break
+  fi
+  sleep 0.2
+done
+
+for host in ${uphosts[@]}; do
+  echo $host >> "$out"
+  cat "$JOB_OUT_DIR/$host/$jobname.out" >> "$out"
+  printf "$delim" >> "$out"
+done
