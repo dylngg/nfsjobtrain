@@ -89,7 +89,7 @@ downhosts=($hosts)
 uphosts=()
 starttime=`date +%s`
 endtime=`expr $starttime + $timeout`
-while [ "`date +%s`" -lt "$endtime" ]; do
+while (( "`date +%s`" <= "$endtime" )); do
   for host in ${downhosts[@]}; do
     if [ -f "$JOB_OUT_DIR/$host/$jobname.out" ]; then
       downhosts=("${downhosts[@]:1}")
